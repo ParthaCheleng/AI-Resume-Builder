@@ -29,6 +29,7 @@ export interface ResumeData {
         github: string;
         linkedin: string;
     };
+    template: "classic" | "modern" | "minimal";
 }
 
 export const defaultResumeData: ResumeData = {
@@ -47,4 +48,5 @@ export const defaultResumeData: ResumeData = {
         github: "",
         linkedin: "",
     },
+    template: "classic",
 };

@@ -45,7 +45,7 @@ export default function ScoreMeter() {
 
             {suggestions.length > 0 && (
                 <div style={{ marginTop: "var(--spacing-2)" }} className="space-y-1">
-                    <p style={{ fontSize: "12px", textTransform: "uppercase", fontWeight: 600, color: "#666", margin: 0 }}>Suggestions to improve:</p>
+                    <p style={{ fontSize: "12px", textTransform: "uppercase", fontWeight: 600, color: "#666", margin: 0 }}>Top 3 Improvements:</p>
                     <ul style={{ paddingLeft: "var(--spacing-3)", margin: 0, fontSize: "14px", color: "#444" }}>
                         {suggestions.map((sug, idx) => (
                             <li key={idx}>{sug}</li>

@@ -8,6 +8,7 @@ interface ResumeStore {
     updateSummary: (value: string) => void;
     updateSkills: (value: string) => void;
     updateLinks: (field: keyof ResumeData["links"], value: string) => void;
+    setTemplate: (template: ResumeData["template"]) => void;
 
     // Array operations
     addEducation: () => void;
@@ -43,6 +44,9 @@ export const useResumeStore = create<ResumeStore>()(
 
             updateLinks: (field, value) =>
                 set((state) => ({ data: { ...state.data, links: { ...state.data.links, [field]: value } } })),
+
+            setTemplate: (template) =>
+                set((state) => ({ data: { ...state.data, template } })),
 
             addEducation: () =>
                 set((state) => ({ data: { ...state.data, education: [...state.data.education, { id: generateId(), school: "", degree: "", date: "" }] } })),
@@ -109,7 +113,8 @@ export const useResumeStore = create<ResumeStore>()(
                     links: {
                         github: "github.com/alexdev",
                         linkedin: "linkedin.com/in/alexdev"
-                    }
+                    },
+                    template: "classic"
                 }
             }),
         }),
