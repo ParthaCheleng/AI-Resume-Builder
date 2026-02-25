@@ -6,8 +6,10 @@
   --bg-color: #F7F6F3;
   --text-primary: #111111;
   --accent-color: #8B0000;
-  --success-color: #6B8E23; /* Muted green */
-  --warning-color: #DAA520; /* Muted amber */
+  --success-color: #6B8E23;
+  /* Muted green */
+  --warning-color: #DAA520;
+  /* Muted amber */
 
   --spacing-1: 8px;
   --spacing-2: 16px;
@@ -28,7 +30,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-playfair), serif;
   margin: 0;
   font-weight: 600;
@@ -84,7 +91,8 @@ button:focus {
 }
 
 /* Inputs */
-input, textarea {
+input,
+textarea {
   font-family: inherit;
   border: 1px solid #D1D1D1;
   border-radius: var(--border-radius);
@@ -93,7 +101,8 @@ input, textarea {
   background-color: white;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: var(--accent-color);
 }
@@ -111,10 +120,21 @@ input:focus, textarea:focus {
   max-width: var(--max-text-width);
 }
 
-.space-y-1 > * + * { margin-top: var(--spacing-1); }
-.space-y-2 > * + * { margin-top: var(--spacing-2); }
-.space-y-3 > * + * { margin-top: var(--spacing-3); }
-.space-y-4 > * + * { margin-top: var(--spacing-4); }
+.space-y-1>*+* {
+  margin-top: var(--spacing-1);
+}
+
+.space-y-2>*+* {
+  margin-top: var(--spacing-2);
+}
+
+.space-y-3>*+* {
+  margin-top: var(--spacing-3);
+}
+
+.space-y-4>*+* {
+  margin-top: var(--spacing-4);
+}
 
 .flex-center {
   display: flex;
@@ -126,4 +146,33 @@ input:focus, textarea:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body,
+  html {
+    background-color: white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Reset layout constraints to let the resume take over */
+  main {
+    display: block !important;
+  }
+
+  /* We want print to force true B&W layout logic on the print wrapper box */
+  .print-wrapper {
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }

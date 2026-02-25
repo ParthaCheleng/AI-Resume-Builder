@@ -15,7 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-            <header style={{
+            <header className="no-print" style={{
                 display: "flex",
                 justifyContent: "center",
                 padding: "var(--spacing-3)",

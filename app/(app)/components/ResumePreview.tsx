@@ -81,7 +81,7 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
                         Experience
                     </h2>
                     {experience.map(exp => (
-                        <div key={exp.id} style={{ marginBottom: "16px" }}>
+                        <div key={exp.id} style={{ marginBottom: "16px", pageBreakInside: "avoid" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: "14px", color: "#111" }}>
                                 <span>{exp.title}</span>
                                 <span>{exp.date}</span>
@@ -104,7 +104,7 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
                         Education
                     </h2>
                     {education.map(edu => (
-                        <div key={edu.id} style={{ marginBottom: "8px" }}>
+                        <div key={edu.id} style={{ marginBottom: "8px", pageBreakInside: "avoid" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: "14px", color: "#111" }}>
                                 <span>{edu.school}</span>
                                 <span>{edu.date}</span>
@@ -122,7 +122,7 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
                         Projects
                     </h2>
                     {projects.map(proj => (
-                        <div key={proj.id} style={{ marginBottom: "12px" }}>
+                        <div key={proj.id} style={{ marginBottom: "12px", pageBreakInside: "avoid" }}>
                             <div style={{ fontWeight: 700, fontSize: "14px", color: "#111" }}>{proj.name}</div>
                             <ul style={{ fontSize: "14px", margin: "4px 0 0 0", paddingLeft: "20px", lineHeight: 1.6, color: "#222" }}>
                                 {proj.description.split('\n').filter(Boolean).map((bullet, i) => (
