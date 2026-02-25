@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useResumeStore } from "../hooks/useResumeStore";
 import ResumePreview from "../components/ResumePreview";
 import TemplateSelector from "../components/TemplateSelector";
+import ScoreMeter from "../components/ScoreMeter";
 import { generatePlainTextResume } from "../utils/export";
 
 export default function PreviewPage() {
@@ -74,12 +75,19 @@ export default function PreviewPage() {
                 border: "1px solid #E5E5E5",
                 boxShadow: "0 4px 6px rgba(0,0,0,0.02)"
             }}>
-                <TemplateSelector
-                    currentTemplate={data.template}
-                    setTemplate={setTemplate}
-                    currentThemeColor={data.themeColor}
-                    setThemeColor={setThemeColor}
-                />
+                <div style={{ display: "flex", flexDirection: "row", gap: "24px", flexWrap: "wrap" }}>
+                    <div style={{ flex: "1 1 300px" }}>
+                        <ScoreMeter />
+                    </div>
+                    <div style={{ flex: "2 1 400px" }}>
+                        <TemplateSelector
+                            currentTemplate={data.template}
+                            setTemplate={setTemplate}
+                            currentThemeColor={data.themeColor}
+                            setThemeColor={setThemeColor}
+                        />
+                    </div>
+                </div>
 
                 <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", borderTop: "1px solid #E5E5E5", paddingTop: "24px" }}>
                     <button onClick={handlePrint} className="btn-primary" disabled={isExporting}>
