@@ -6,7 +6,7 @@ interface ResumeStore {
     data: ResumeData;
     updatePersonalInfo: (field: keyof ResumeData["personalInfo"], value: string) => void;
     updateSummary: (value: string) => void;
-    updateSkills: (value: string) => void;
+    updateSkills: (category: keyof ResumeData["skills"], skills: string[]) => void;
     updateLinks: (field: keyof ResumeData["links"], value: string) => void;
     setTemplate: (template: ResumeData["template"]) => void;
 
@@ -39,8 +39,8 @@ export const useResumeStore = create<ResumeStore>()(
             updateSummary: (value) =>
                 set((state) => ({ data: { ...state.data, summary: value } })),
 
-            updateSkills: (value) =>
-                set((state) => ({ data: { ...state.data, skills: value } })),
+            updateSkills: (category, skills) =>
+                set((state) => ({ data: { ...state.data, skills: { ...state.data.skills, [category]: skills } } })),
 
             updateLinks: (field, value) =>
                 set((state) => ({ data: { ...state.data, links: { ...state.data.links, [field]: value } } })),
@@ -77,7 +77,7 @@ export const useResumeStore = create<ResumeStore>()(
                 set((state) => ({ data: { ...state.data, experience: state.data.experience.filter(exp => exp.id !== id) } })),
 
             addProject: () =>
-                set((state) => ({ data: { ...state.data, projects: [...state.data.projects, { id: generateId(), name: "", description: "" }] } })),
+                set((state) => ({ data: { ...state.data, projects: [...state.data.projects, { id: generateId(), name: "", description: "", techStack: [] }] } })),
 
             updateProject: (id, field, value) =>
                 set((state) => ({
@@ -107,9 +107,13 @@ export const useResumeStore = create<ResumeStore>()(
                         { id: generateId(), title: "Software Engineer", company: "Global Software Solutions", date: "Jun 2017 - Dec 2019", description: "Implemented key tracking features improving data resolution for client dashboards.\nOptimized SQL queries cutting report generation time by 30 seconds on average." }
                     ],
                     projects: [
-                        { id: generateId(), name: "E-Commerce Platform Redesign", description: "Migrated legacy frontend to Next.js, improving page load speeds by 50% and increasing conversion rate by 15%." }
+                        { id: generateId(), name: "E-Commerce Platform Redesign", description: "Migrated legacy frontend to Next.js, improving page load speeds by 50% and increasing conversion rate by 15%.", techStack: ["Next.js", "React", "TypeScript", "TailwindCSS"], liveUrl: "https://example.com" }
                     ],
-                    skills: "TypeScript, JavaScript, Python, React, Next.js, Node.js, Express, PostgreSQL, MongoDB, AWS, Docker, Git",
+                    skills: {
+                        technical: ["TypeScript", "JavaScript", "Python", "React", "Next.js", "Node.js", "Express", "PostgreSQL", "MongoDB"],
+                        soft: ["Leadership", "Communication", "Problem Solving"],
+                        tools: ["AWS", "Docker", "Git"]
+                    },
                     links: {
                         github: "github.com/alexdev",
                         linkedin: "linkedin.com/in/alexdev"

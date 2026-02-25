@@ -123,7 +123,24 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
                     </h2>
                     {projects.map(proj => (
                         <div key={proj.id} style={{ marginBottom: "12px", pageBreakInside: "avoid" }}>
-                            <div style={{ fontWeight: 700, fontSize: "14px", color: "#111" }}>{proj.name}</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div style={{ fontWeight: 700, fontSize: "14px", color: "#111" }}>
+                                    {proj.name}
+                                    {(proj.liveUrl || proj.githubUrl) && (
+                                        <span style={{ marginLeft: "8px", fontWeight: 400, fontSize: "12px", gap: "6px", display: "inline-flex" }}>
+                                            {proj.liveUrl && <a href={proj.liveUrl} target="_blank" rel="noopener noreferrer" style={{ color: styles.accentColor, textDecoration: "none" }}>🔗 Live</a>}
+                                            {proj.githubUrl && <a href={proj.githubUrl} target="_blank" rel="noopener noreferrer" style={{ color: styles.accentColor, textDecoration: "none" }}>🐈 GitHub</a>}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            {proj.techStack && proj.techStack.length > 0 && (
+                                <div style={{ fontSize: "12px", color: "#666", marginTop: "2px", marginBottom: "4px" }}>
+                                    <strong>Stack:</strong> {proj.techStack.join(", ")}
+                                </div>
+                            )}
+
                             <ul style={{ fontSize: "14px", margin: "4px 0 0 0", paddingLeft: "20px", lineHeight: 1.6, color: "#222" }}>
                                 {proj.description.split('\n').filter(Boolean).map((bullet, i) => (
                                     <li key={i}>{bullet}</li>
@@ -135,12 +152,29 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
             )}
 
             {/* SKILLS */}
-            {skills.trim() !== "" && (
+            {(skills.technical.length > 0 || skills.soft.length > 0 || skills.tools.length > 0) && (
                 <div style={{ marginBottom: "var(--spacing-3)" }}>
                     <h2 style={{ fontSize: "14px", textTransform: "uppercase", borderBottom: styles.divider, paddingBottom: "4px", marginBottom: "8px", fontWeight: 700, color: styles.accentColor, textAlign: styles.sectionTitleAlign }}>
                         Skills
                     </h2>
-                    <p style={{ fontSize: "14px", margin: 0, lineHeight: 1.6, color: "#222" }}>{skills}</p>
+
+                    <div className="space-y-2">
+                        {skills.technical.length > 0 && (
+                            <div style={{ fontSize: "14px", lineHeight: 1.6, color: "#222" }}>
+                                <strong>Technical:</strong> {skills.technical.join(", ")}
+                            </div>
+                        )}
+                        {skills.soft.length > 0 && (
+                            <div style={{ fontSize: "14px", lineHeight: 1.6, color: "#222" }}>
+                                <strong>Soft Skills:</strong> {skills.soft.join(", ")}
+                            </div>
+                        )}
+                        {skills.tools.length > 0 && (
+                            <div style={{ fontSize: "14px", lineHeight: 1.6, color: "#222" }}>
+                                <strong>Tools:</strong> {skills.tools.join(", ")}
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 

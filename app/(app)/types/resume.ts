@@ -23,8 +23,15 @@ export interface ResumeData {
         id: string;
         name: string;
         description: string;
+        techStack: string[];
+        githubUrl?: string;
+        liveUrl?: string;
     }>;
-    skills: string;
+    skills: {
+        technical: string[];
+        soft: string[];
+        tools: string[];
+    };
     links: {
         github: string;
         linkedin: string;
@@ -43,7 +50,11 @@ export const defaultResumeData: ResumeData = {
     education: [],
     experience: [],
     projects: [],
-    skills: "",
+    skills: {
+        technical: [],
+        soft: [],
+        tools: []
+    },
     links: {
         github: "",
         linkedin: "",

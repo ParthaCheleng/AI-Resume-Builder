@@ -19,9 +19,9 @@ export function calculateATSScore(data: ResumeData): number {
         score += 10;
     }
 
-    // 4. +10 if skills list has ≥ 8 items
-    const skillsList = data.skills.split(",").map(s => s.trim()).filter(s => s.length > 0);
-    if (skillsList.length >= 8) {
+    // 4. +10 if skills list has ≥ 8 items total across categories
+    const totalSkills = data.skills.technical.length + data.skills.soft.length + data.skills.tools.length;
+    if (totalSkills >= 8) {
         score += 10;
     }
 

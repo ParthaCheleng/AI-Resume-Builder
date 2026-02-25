@@ -30,8 +30,8 @@ export function generateSuggestions(data: ResumeData): string[] {
     }
 
     // Suggestion 5: Check skills count
-    const skillsList = data.skills.split(",").map(s => s.trim()).filter(s => s.length > 0);
-    if (skillsList.length < 8 && suggestions.length < 3) {
+    const totalSkills = data.skills.technical.length + data.skills.soft.length + data.skills.tools.length;
+    if (totalSkills < 8 && suggestions.length < 3) {
         suggestions.push("Add more relevant skills.");
     }
 

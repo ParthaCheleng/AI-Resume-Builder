@@ -5,9 +5,12 @@ import { useResumeStore } from "../hooks/useResumeStore";
 import ScoreMeter from "../components/ScoreMeter";
 import ResumePreview from "../components/ResumePreview";
 import TemplateSelector from "../components/TemplateSelector";
+import PillInput from "../components/PillInput";
 
 export default function BuilderPage() {
     const [mounted, setMounted] = useState(false);
+    const [isSuggestingSkills, setIsSuggestingSkills] = useState(false);
+    const [openProjectId, setOpenProjectId] = useState<string | null>(null);
     const store = useResumeStore();
 
     useEffect(() => {
@@ -165,36 +168,144 @@ export default function BuilderPage() {
                     {projects.map((proj, index) => {
                         const needsVerb = !checkActionVerb(proj.description);
                         const needsImpact = !checkMeasurableImpact(proj.description);
+                        const charCount = proj.description.length;
+                        const isOverLimit = charCount > 200;
 
                         return (
-                            <div key={proj.id} style={{ border: "1px solid #E5E5E5", padding: "16px", borderRadius: "8px", position: "relative" }} className="space-y-2">
-                                <button
-                                    onClick={() => removeProject(proj.id)}
-                                    style={{ position: "absolute", top: "8px", right: "8px", background: "none", border: "none", color: "var(--accent-color)", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
-                                >
-                                    ✕ REMOVE
-                                </button>
-                                <div style={{ fontWeight: 600, fontSize: "14px", color: "#666", marginBottom: "8px" }}>Project #{index + 1}</div>
-                                <input type="text" placeholder="Project Name" value={proj.name} onChange={(e) => updateProject(proj.id, "name", e.target.value)} style={{ width: "100%", boxSizing: "border-box" }} />
+                            <details
+                                key={proj.id}
+                                style={{ border: "1px solid #E5E5E5", borderRadius: "8px", backgroundColor: "white" }}
+                                open={openProjectId === proj.id}
+                                onToggle={(e) => {
+                                    if ((e.target as HTMLDetailsElement).open) {
+                                        setOpenProjectId(proj.id);
+                                    } else if (openProjectId === proj.id) {
+                                        setOpenProjectId(null);
+                                    }
+                                }}
+                            >
+                                <summary style={{ padding: "16px", fontWeight: 600, cursor: "pointer", display: "flex", justifyContent: "space-between", outline: "none" }}>
+                                    <span>{proj.name || `Project #${index + 1}`}</span>
+                                </summary>
 
-                                <textarea rows={3} placeholder="Description (bullets)" value={proj.description} onChange={(e) => updateProject(proj.id, "description", e.target.value)} style={{ width: "100%", boxSizing: "border-box", resize: "vertical" }} />
+                                <div style={{ padding: "0 16px 16px 16px", position: "relative" }} className="space-y-4">
+                                    <button
+                                        onClick={() => removeProject(proj.id)}
+                                        style={{ position: "absolute", top: "0", right: "16px", background: "none", border: "none", color: "var(--accent-color)", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
+                                    >
+                                        ✕ REMOVE
+                                    </button>
 
-                                {/* Inline Bullet Guidance */}
-                                {(needsVerb || needsImpact) && (
-                                    <div style={{ backgroundColor: "var(--bg-color)", padding: "8px", borderRadius: "4px", fontSize: "12px", color: "var(--warning-color)", borderLeft: "3px solid var(--warning-color)" }}>
-                                        {needsVerb && <div style={{ marginBottom: "2px" }}>💡 Start with a strong action verb.</div>}
-                                        {needsImpact && <div>💡 Add measurable impact (numbers).</div>}
+                                    <div className="space-y-2">
+                                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Project Details</label>
+                                        <input type="text" placeholder="Project Name" value={proj.name} onChange={(e) => updateProject(proj.id, "name", e.target.value)} style={{ width: "100%", boxSizing: "border-box" }} />
                                     </div>
-                                )}
-                            </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex-between">
+                                            <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Description</label>
+                                            <span style={{ fontSize: "12px", color: isOverLimit ? "var(--accent-color)" : "#999", fontWeight: isOverLimit ? 700 : 400 }}>
+                                                {charCount} / 200
+                                            </span>
+                                        </div>
+                                        <textarea
+                                            rows={3}
+                                            placeholder="Description (bullets)"
+                                            value={proj.description}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                if (val.length <= 200) {
+                                                    updateProject(proj.id, "description", val);
+                                                }
+                                            }}
+                                            style={{ width: "100%", boxSizing: "border-box", resize: "vertical", borderColor: isOverLimit ? "var(--accent-color)" : "#D1D1D1" }}
+                                        />
+
+                                        {/* Inline Bullet Guidance */}
+                                        {(needsVerb || needsImpact) && (
+                                            <div style={{ backgroundColor: "var(--bg-color)", padding: "8px", borderRadius: "4px", fontSize: "12px", color: "var(--warning-color)", borderLeft: "3px solid var(--warning-color)" }}>
+                                                {needsVerb && <div style={{ marginBottom: "2px" }}>💡 Start with a strong action verb.</div>}
+                                                {needsImpact && <div>💡 Add measurable impact (numbers).</div>}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Tech Stack</label>
+                                        <PillInput
+                                            placeholder="Add tech stack item & press enter..."
+                                            items={proj.techStack || []}
+                                            onChange={(items) => updateProject(proj.id, "techStack", items as any)}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Links (Optional)</label>
+                                        <input type="url" placeholder="Live URL" value={proj.liveUrl || ""} onChange={(e) => updateProject(proj.id, "liveUrl", e.target.value)} style={{ width: "100%", boxSizing: "border-box" }} />
+                                        <input type="url" placeholder="GitHub URL" value={proj.githubUrl || ""} onChange={(e) => updateProject(proj.id, "githubUrl", e.target.value)} style={{ width: "100%", boxSizing: "border-box", marginTop: "8px" }} />
+                                    </div>
+                                </div>
+                            </details>
                         );
                     })}
-                    <button onClick={addProject} className="btn-secondary" style={{ width: "100%" }}>+ Add Project</button>
+                    <button onClick={() => {
+                        addProject();
+                        const newIndex = projects.length;
+                        // Best effort to open the next item (will rely on stable render)
+                    }} className="btn-secondary" style={{ width: "100%" }}>+ Add Project</button>
                 </div>
 
-                <div className="card space-y-2">
-                    <h3 style={{ fontSize: "18px", fontFamily: "var(--font-inter)", fontWeight: 600 }}>Skills</h3>
-                    <input type="text" value={skills} onChange={(e) => updateSkills(e.target.value)} placeholder="Comma-separated skills..." style={{ width: "100%", boxSizing: "border-box" }} />
+                <div className="card space-y-4">
+                    <div className="flex-between">
+                        <h3 style={{ fontSize: "18px", fontFamily: "var(--font-inter)", fontWeight: 600 }}>Skills</h3>
+                        <button
+                            className="btn-secondary"
+                            style={{ fontSize: "12px", padding: "4px 8px" }}
+                            disabled={isSuggestingSkills}
+                            onClick={() => {
+                                setIsSuggestingSkills(true);
+                                setTimeout(() => {
+                                    const technicalSet = new Set([...skills.technical, "TypeScript", "React", "Node.js", "PostgreSQL", "GraphQL"]);
+                                    const softSet = new Set([...skills.soft, "Team Leadership", "Problem Solving"]);
+                                    const toolsSet = new Set([...skills.tools, "Git", "Docker", "AWS"]);
+
+                                    updateSkills("technical", Array.from(technicalSet));
+                                    updateSkills("soft", Array.from(softSet));
+                                    updateSkills("tools", Array.from(toolsSet));
+                                    setIsSuggestingSkills(false);
+                                }, 1000);
+                            }}
+                        >
+                            {isSuggestingSkills ? "Loading..." : "✨ Suggest Skills"}
+                        </button>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Technical Skills ({skills.technical.length})</label>
+                        <PillInput
+                            placeholder="Add generic technical skill..."
+                            items={skills.technical}
+                            onChange={(items) => updateSkills("technical", items)}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Soft Skills ({skills.soft.length})</label>
+                        <PillInput
+                            placeholder="Add soft skill..."
+                            items={skills.soft}
+                            onChange={(items) => updateSkills("soft", items)}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label style={{ fontSize: "12px", fontWeight: 600, color: "#666" }}>Tools & Technologies ({skills.tools.length})</label>
+                        <PillInput
+                            placeholder="Add tool/software..."
+                            items={skills.tools}
+                            onChange={(items) => updateSkills("tools", items)}
+                        />
+                    </div>
                 </div>
 
                 <div className="card space-y-2">

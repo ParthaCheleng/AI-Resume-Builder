@@ -59,7 +59,17 @@ export function generatePlainTextResume(data: ResumeData): string {
         lines.push("PROJECTS");
         lines.push("-".repeat(40));
         data.projects.forEach(proj => {
-            lines.push(proj.name);
+            let titleLine = proj.name;
+            const links = [proj.liveUrl, proj.githubUrl].filter(Boolean);
+            if (links.length > 0) {
+                titleLine += ` | ${links.join(" - ")}`;
+            }
+            lines.push(titleLine);
+
+            if (proj.techStack && proj.techStack.length > 0) {
+                lines.push(`Tech Stack: ${proj.techStack.join(", ")}`);
+            }
+
             if (proj.description) {
                 proj.description.split("\n").filter(Boolean).forEach(bullet => {
                     lines.push(`• ${bullet.trim()}`);
@@ -70,10 +80,16 @@ export function generatePlainTextResume(data: ResumeData): string {
     }
 
     // Skills
-    if (data.skills.trim()) {
+    const hasTechnical = data.skills.technical.length > 0;
+    const hasSoft = data.skills.soft.length > 0;
+    const hasTools = data.skills.tools.length > 0;
+
+    if (hasTechnical || hasSoft || hasTools) {
         lines.push("SKILLS");
         lines.push("-".repeat(40));
-        lines.push(data.skills.trim());
+        if (hasTechnical) lines.push(`Technical: ${data.skills.technical.join(", ")}`);
+        if (hasSoft) lines.push(`Soft: ${data.skills.soft.join(", ")}`);
+        if (hasTools) lines.push(`Tools: ${data.skills.tools.join(", ")}`);
         lines.push("");
     }
 
