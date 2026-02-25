@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #F7F6F3;
+  --text-primary: #111111;
+  --accent-color: #8B0000;
+  --success-color: #6B8E23; /* Muted green */
+  --warning-color: #DAA520; /* Muted amber */
+
+  --spacing-1: 8px;
+  --spacing-2: 16px;
+  --spacing-3: 24px;
+  --spacing-4: 40px;
+  --spacing-5: 64px;
+
+  --border-radius: 8px;
+  --max-text-width: 720px;
+  --transition-speed: 150ms;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), serif;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Base interactive elements */
+button {
+  cursor: pointer;
+  transition: all var(--transition-speed) ease-in-out;
+  border-radius: var(--border-radius);
+  font-family: inherit;
+}
+
+button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-1) var(--spacing-3);
+  font-weight: 500;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid #D1D1D1;
+  padding: var(--spacing-1) var(--spacing-3);
+  font-weight: 500;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--text-primary);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Inputs */
+input, textarea {
+  font-family: inherit;
+  border: 1px solid #D1D1D1;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-1);
+  transition: border-color var(--transition-speed) ease-in-out;
+  background-color: white;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border: 1px solid #E5E5E5;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-3);
+}
+
+/* Structural Classes */
+.text-block {
+  max-width: var(--max-text-width);
+}
+
+.space-y-1 > * + * { margin-top: var(--spacing-1); }
+.space-y-2 > * + * { margin-top: var(--spacing-2); }
+.space-y-3 > * + * { margin-top: var(--spacing-3); }
+.space-y-4 > * + * { margin-top: var(--spacing-4); }
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
