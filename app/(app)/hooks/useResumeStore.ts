@@ -9,6 +9,7 @@ interface ResumeStore {
     updateSkills: (category: keyof ResumeData["skills"], skills: string[]) => void;
     updateLinks: (field: keyof ResumeData["links"], value: string) => void;
     setTemplate: (template: ResumeData["template"]) => void;
+    setThemeColor: (color: string) => void;
 
     // Array operations
     addEducation: () => void;
@@ -47,6 +48,9 @@ export const useResumeStore = create<ResumeStore>()(
 
             setTemplate: (template) =>
                 set((state) => ({ data: { ...state.data, template } })),
+
+            setThemeColor: (color) =>
+                set((state) => ({ data: { ...state.data, themeColor: color } })),
 
             addEducation: () =>
                 set((state) => ({ data: { ...state.data, education: [...state.data.education, { id: generateId(), school: "", degree: "", date: "" }] } })),
@@ -118,12 +122,13 @@ export const useResumeStore = create<ResumeStore>()(
                         github: "github.com/alexdev",
                         linkedin: "linkedin.com/in/alexdev"
                     },
-                    template: "classic"
+                    template: "classic",
+                    themeColor: "hsl(168, 60%, 40%)"
                 }
             }),
         }),
         {
-            name: "resumeBuilderData", // localStorage key
+            name: "resumeTemplate", // localStorage key
             // Safely handle potential corruption by merging state carefully or catching parse errors
             onRehydrateStorage: () => (state, error) => {
                 if (error) {

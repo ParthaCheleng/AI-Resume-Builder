@@ -37,6 +37,7 @@ export interface ResumeData {
         linkedin: string;
     };
     template: "classic" | "modern" | "minimal";
+    themeColor: string;
 }
 
 export const defaultResumeData: ResumeData = {
@@ -60,4 +61,5 @@ export const defaultResumeData: ResumeData = {
         linkedin: "",
     },
     template: "classic",
+    themeColor: "hsl(168, 60%, 40%)", // Default Teal
 };

@@ -37,10 +37,11 @@ export default function BuilderPage() {
         updateProject,
         removeProject,
         loadSampleData,
-        setTemplate
+        setTemplate,
+        setThemeColor
     } = store;
 
-    const { personalInfo, summary, education, experience, projects, skills, links, template } = data;
+    const { personalInfo, summary, education, experience, projects, skills, links, template, themeColor } = data;
 
     const checkActionVerb = (text: string) => {
         if (!text.trim()) return true; // Don't complain about empty boxes immediately
@@ -60,6 +61,16 @@ export default function BuilderPage() {
             <div style={{ flex: "1 1 400px", padding: "var(--spacing-4)", borderRight: "1px solid #E5E5E5", overflowY: "auto", maxHeight: "calc(100vh - 70px)" }} className="space-y-4">
 
                 <ScoreMeter />
+
+                <div style={{ padding: "24px 0", borderBottom: "1px solid #E5E5E5", marginBottom: "24px" }}>
+                    <h3 style={{ fontSize: "18px", fontFamily: "var(--font-inter)", fontWeight: 600, marginBottom: "16px" }}>Resume Settings</h3>
+                    <TemplateSelector
+                        currentTemplate={template}
+                        setTemplate={setTemplate}
+                        currentThemeColor={themeColor}
+                        setThemeColor={setThemeColor}
+                    />
+                </div>
 
                 <div className="flex-between">
                     <h2 style={{ fontSize: "24px" }}>Resume Details</h2>

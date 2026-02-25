@@ -9,6 +9,8 @@ import { generatePlainTextResume } from "../utils/export";
 export default function PreviewPage() {
     const [mounted, setMounted] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [showToast, setShowToast] = useState(false);
     const store = useResumeStore();
 
     useEffect(() => {
@@ -19,7 +21,7 @@ export default function PreviewPage() {
         return <div style={{ padding: "var(--spacing-5)" }}>Loading Preview...</div>;
     }
 
-    const { data, setTemplate } = store;
+    const { data, setTemplate, setThemeColor } = store;
 
     const validateExport = () => {
         const isNameMissing = !data.personalInfo.fullName.trim();
@@ -33,7 +35,12 @@ export default function PreviewPage() {
 
     const handlePrint = () => {
         if (validateExport()) {
-            window.print();
+            setIsExporting(true);
+            setTimeout(() => {
+                setIsExporting(false);
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 3000);
+            }, 800);
         }
     };
 
@@ -59,18 +66,24 @@ export default function PreviewPage() {
                 maxWidth: "800px",
                 margin: "0 auto var(--spacing-4) auto",
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: "column",
+                gap: "24px",
                 backgroundColor: "white",
-                padding: "16px",
-                borderRadius: "8px",
-                border: "1px solid #E5E5E5"
+                padding: "24px",
+                borderRadius: "12px",
+                border: "1px solid #E5E5E5",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.02)"
             }}>
-                <TemplateSelector currentTemplate={data.template} setTemplate={setTemplate} />
+                <TemplateSelector
+                    currentTemplate={data.template}
+                    setTemplate={setTemplate}
+                    currentThemeColor={data.themeColor}
+                    setThemeColor={setThemeColor}
+                />
 
-                <div style={{ display: "flex", gap: "12px" }}>
-                    <button onClick={handlePrint} className="btn-primary">
-                        Print / Save as PDF
+                <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", borderTop: "1px solid #E5E5E5", paddingTop: "24px" }}>
+                    <button onClick={handlePrint} className="btn-primary" disabled={isExporting}>
+                        {isExporting ? "Generating PDF..." : "Download PDF"}
                     </button>
                     <button onClick={handleCopyText} className="btn-secondary">
                         {copied ? "Copied!" : "Copy Resume as Text"}
@@ -82,6 +95,23 @@ export default function PreviewPage() {
                 <ResumePreview data={data} template={data.template} />
             </div>
 
+            {/* Custom Toast Notification */}
+            {showToast && (
+                <div style={{
+                    position: "fixed",
+                    bottom: "24px",
+                    right: "24px",
+                    backgroundColor: "#333",
+                    color: "white",
+                    padding: "16px 24px",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    zIndex: 9999,
+                    animation: "fadeIn 0.3s ease"
+                }}>
+                    PDF export ready! Check your downloads.
+                </div>
+            )}
         </div>
     );
 }
